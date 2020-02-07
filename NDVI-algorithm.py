@@ -95,9 +95,9 @@ colors =[(1.0000, 1.0000, 1.0000), (0.9804, 0.9804, 0.9804), (0.9647, 0.9647, 0.
 (1.0000, 0.0000, 0.9373)]
 
 
+imgFilePath = "C:/Users/Aleksi/NDVI/PurkkaProject/test.jpg"
 
-
-img = Image.open('c:/Users/Lauri/Desktop/test.jpg').convert("RGB")
+img = Image.open(imgFilePath).convert("RGB")
 
 mask = numpy.asarray(img)
 
@@ -139,5 +139,5 @@ print(sumAll/float(amount))
 
 fastiecm=LinearSegmentedColormap.from_list('mylist', colors) 
 
-plt.imsave("c:/users/lauri/desktop/%.4f.jpg" % (sumAll/float(amount)),arrNDVI,cmap=fastiecm, vmin=-1.0, vmax=1.0)
+plt.imsave("C:/Users/Aleksi/NDVI/PurkkaProject/%.4f.jpg" % (sumAll/float(amount)),arrNDVI,cmap=fastiecm, vmin=-1.0, vmax=1.0)
 
