@@ -7,9 +7,7 @@ import matplotlib.pyplot as plt
 import cv2
 from matplotlib.colors import LinearSegmentedColormap, hsv_to_rgb
 
-"""REMEMBER TO CHANGE AND CREATE ALL THE FILE PATHS
-   CREATING RAW AND FINAL FOLDERS IS REQUIRED UNLESS
-   YOU UPDATE THE FILE CACHE                        """
+"""CREATE FOLDERS CALLED COLORMAP AND CROP IN THE SAME FOLDER AS THIS PYTHON FILE"""
 
 
 colors =[(1.0000, 1.0000, 1.0000), (0.9804, 0.9804, 0.9804), (0.9647, 0.9647, 0.9647), 
@@ -100,10 +98,20 @@ colors =[(1.0000, 1.0000, 1.0000), (0.9804, 0.9804, 0.9804), (0.9647, 0.9647, 0.
 (1.0000, 0.0000, 0.9373)]
 
 #loads original image
-img = Image.open('C:/Users/Elias/Desktop/GreenThumb_new/usethis.jpg').convert("RGB")
+#this is used for colormapping
+img = Image.open('test.jpg').convert("RGB")
 
+#loads original image without colormap
+#this is used for segmentation
+real_image = cv2.imread("test.jpg")
+
+
+"""
+COLOR
+MAPPING
+
+"""
 mask = numpy.asarray(img)
-
 
 imgR, imgG, imgB = img.split()
 
@@ -117,38 +125,38 @@ redBlueSum = (arrR + arrB)
 redBlueSum[redBlueSum ==0] = 0.01
 
 arrNDVI = redBlueDiff/redBlueSum
-#arrNDVI[arrNDVI < 0] = -1
-arrNDVI[arrNDVI == 0] = -1 #custom for blocking black pixels
+arrNDVI[arrNDVI == 0] = -1
 sumAll = 0
 amount = 0.00001
 
-
 for row in arrNDVI:
     for pix in row:
-#        if pix > 0:
-         if pix != -1: #custom for blocking black pixels
-            
+         if pix != -1:
             sumAll += pix
             amount += 1
-
-
 
 fastiecm=LinearSegmentedColormap.from_list('mylist', colors)
 
 #saves colormapped original image
-plt.imsave("C:/Users/Elias/Desktop/GreenThumb_new/raw/delete_later.jpg",arrNDVI,cmap=fastiecm, vmin=-1.0, vmax=1.0)
+plt.imsave("./colormap/delete_later.jpg",arrNDVI,cmap=fastiecm, vmin=-1.0, vmax=1.0)
 
+
+
+"""
+IMAGE
+SEGMENTATION
+
+"""
 #loads colormapped image
-image = cv2.imread("C:/Users/Elias/Desktop/GreenThumb_new/raw/delete_later.jpg")
-#loads original image without colormap
-real_image = cv2.imread("C:/Users/Elias/Desktop/GreenThumb_new/usethis.jpg")
+image = cv2.imread("./colormap/delete_later.jpg")
+
 mask = numpy.zeros(image.shape[:2], numpy.uint8)
 backgroundModel = numpy.zeros((1, 65), numpy.float64) 
 foregroundModel = numpy.zeros((1, 65), numpy.float64) 
 
 #CUSTOM VALUES HERE
-rectangle = (450,0,600,500)
-#rectangle = (350,100,600,619)
+#rectangle = (450,0,600,500)
+rectangle = (350,100,600,619)
 #rectangle = (449,250,341,390)
 #rectangle = (350,0,700,719)
 
@@ -162,10 +170,17 @@ mask2 = numpy.where((mask == 2)|(mask == 0), 0, 1).astype('uint8')
 real_image = real_image * mask2[:, :, numpy.newaxis]
 
 #saves the cropped image
-cv2.imwrite('C:/Users/Elias/Desktop/GreenThumb_new/final/usethis_crop.jpg', real_image)
+cv2.imwrite('./crop/cropped.jpg', real_image)
 
+
+
+"""
+NDVI
+CALCULATIONS
+
+"""
 #loads the cropped image
-img = Image.open('C:/Users/Elias/Desktop/GreenThumb_new/final/usethis_crop.jpg').convert("RGB")
+img = Image.open('./crop/cropped.jpg').convert("RGB")
 mask = numpy.asarray(img)
 imgR, imgG, imgB = img.split()
 
@@ -179,17 +194,14 @@ redBlueSum = (arrR + arrB)
 redBlueSum[redBlueSum ==0] = 0.01
 
 arrNDVI = redBlueDiff/redBlueSum
-#arrNDVI[arrNDVI < 0] = -1
-arrNDVI[arrNDVI == 0] = -1 #custom for blocking black pixels
+arrNDVI[arrNDVI == 0] = -1
 sumAll = 0
 amount = 0.00001
 
 
 for row in arrNDVI:
     for pix in row:
-#        if pix > 0:
-         if pix != -1: #custom for blocking black pixels
-            
+         if pix != -1:
             sumAll += pix
             amount += 1
 
@@ -198,5 +210,5 @@ print(sumAll/float(amount))
 fastiecm=LinearSegmentedColormap.from_list('mylist', colors)
 
 #saves the final NDVI calculated image
-plt.imsave("C:/Users/Elias/Desktop/GreenThumb_new/%.4f.jpg" % (sumAll/float(amount)),arrNDVI,cmap=fastiecm, vmin=-1.0, vmax=1.0)
+plt.imsave("./%.4f.jpg" % (sumAll/float(amount)),arrNDVI,cmap=fastiecm, vmin=-1.0, vmax=1.0)
 
