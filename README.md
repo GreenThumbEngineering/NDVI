@@ -1,5 +1,5 @@
 # NDVI
-NDVI-algorithms
+NDVI-algorithms, algorithm is credited to PiddePannkauga, https://github.com/PiddePannkauga/ndviMachine
 
 ---
 
