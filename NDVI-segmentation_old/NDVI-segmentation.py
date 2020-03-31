@@ -99,11 +99,11 @@ colors =[(1.0000, 1.0000, 1.0000), (0.9804, 0.9804, 0.9804), (0.9647, 0.9647, 0.
 
 #loads original image
 #this is used for colormapping
-img = Image.open('test.jpg').convert("RGB")
+img = Image.open('testing.jpg').convert("RGB")
 
 #loads original image without colormap
 #this is used for segmentation
-real_image = cv2.imread("test.jpg")
+real_image = cv2.imread("testing.jpg")
 
 
 """
@@ -156,14 +156,19 @@ foregroundModel = numpy.zeros((1, 65), numpy.float64)
 
 #CUSTOM VALUES HERE
 #rectangle = (450,0,600,500)
-rectangle = (350,100,600,619)
+#rectangle = (350,100,600,619)
 #rectangle = (449,250,341,390)
 #rectangle = (350,0,700,719)
+#rectangle = (310,10,580,620)
+
+#rectangle = (315,19,700,630)
+rectangle = (0,0,1279,719)
+
 
 #makes mask from colormapped image
 cv2.grabCut(image, mask, rectangle,   
             backgroundModel, foregroundModel, 
-            3, cv2.GC_INIT_WITH_RECT) 
+            10, cv2.GC_INIT_WITH_RECT) 
 mask2 = numpy.where((mask == 2)|(mask == 0), 0, 1).astype('uint8')
 
 #applies mask of the colormapped image to the original image
