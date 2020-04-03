@@ -3,4 +3,8 @@ NDVI-algorithms, algorithm is credited to PiddePannkauga, https://github.com/Pid
 
 ---
 
-Remember to change the file paths to your system's corresponding ones.
+# Segmentation
+Plant segmentation created using edited version of PlantCV's VIS workflow https://plantcv.readthedocs.io/en/stable/vis_tutorial/
+
+---
+
